@@ -50,15 +50,7 @@ export default function ChatSidebar({
       >
         <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-3 md:px-4">
           <div className="flex min-w-0 items-center gap-2.5">
-            <Avatar
-              src={user.avatar ? assetUrl(user.avatar) : ''}
-              username={user.username}
-              size="sm"
-            />
-            <div className="min-w-0">
-              <p className="truncate text-sm font-medium text-ink">{user.username}</p>
-              <p className="truncate text-[11px] text-ink-soft">Signed in</p>
-            </div>
+            <p className="truncate text-sm font-semibold text-ink">Relay</p>
           </div>
           <div className="flex shrink-0 items-center gap-0.5">
             <button
@@ -188,9 +180,21 @@ export default function ChatSidebar({
           />
           <label
             htmlFor="avatar-input"
-            className="cursor-pointer text-center text-[11px] text-ink-soft underline-offset-4 hover:text-accent hover:underline"
+            className="flex cursor-pointer items-center gap-3 rounded-xl p-1.5 transition hover:bg-surface-card"
+            title="Change profile photo"
           >
-            Update profile photo
+            <div className="relative shrink-0">
+              <Avatar
+                src={user.avatar ? assetUrl(user.avatar) : ''}
+                username={user.username}
+                size="sm"
+              />
+              <span className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[9px] text-white shadow">✎</span>
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-medium text-ink">{user.username}</p>
+              <p className="text-[11px] text-ink-soft">Change photo</p>
+            </div>
           </label>
         </footer>
       </aside>
