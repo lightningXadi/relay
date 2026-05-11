@@ -26,7 +26,11 @@ export default function ChatApp() {
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [online, setOnline] = useState(() => new Set());
   const [typingByConvo, setTypingByConvo] = useState({});
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  // On mobile: sidebar auto-opens when no conversation is active
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return true;
+    return false;
+  });
   const [newDmOpen, setNewDmOpen] = useState(false);
   const [groupOpen, setGroupOpen] = useState(false);
   const [groupInfoOpen, setGroupInfoOpen] = useState(false);
@@ -207,7 +211,7 @@ export default function ChatApp() {
     // Removed from a conversation
     function onConvoRemoved({ conversationId }) {
       setConversations((prev) => prev.filter((c) => c.id !== conversationId));
-      if (activeId === conversationId) setActiveId(null);
+      if (activeId === conversationId) { setActiveId(null); setSidebarOpen(true); }
     }
 
     socket.on('message:new', onNew);
@@ -365,6 +369,7 @@ export default function ChatApp() {
         onNewDm={() => setNewDmOpen(true)} onNewGroup={() => setGroupOpen(true)}
         onAvatarPick={(f) => uploadAvatar(f).catch(console.error)}
         mobileOpen={sidebarOpen} onMobileClose={() => setSidebarOpen(false)}
+        hasActiveConvo={!!activeId}
       />
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
@@ -391,7 +396,7 @@ export default function ChatApp() {
           typingUserId={activeId ? typingByConvo[activeId] : null}
           participantsById={participantsById}
           onSend={handleSend} onReact={handleReact} onDelete={handleDelete} onEdit={handleEdit}
-          onOpenCalls={setCallMode} onOpenMenu={() => setSidebarOpen(true)}
+          onOpenCalls={setCallMode} onOpenMenu={() => { setActiveId(null); setSidebarOpen(true); }}
           onOpenGroupInfo={() => setGroupInfoOpen(true)}
         />
       </div>
@@ -411,7 +416,7 @@ export default function ChatApp() {
         conversation={active}
         currentUserId={user.id}
         onUpdated={(updated) => setConversations((prev) => prev.map((c) => c.id === updated.id ? updated : c))}
-        onLeft={() => { setConversations((prev) => prev.filter((c) => c.id !== activeId)); setActiveId(null); }}
+        onLeft={() => { setConversations((prev) => prev.filter((c) => c.id !== activeId)); setActiveId(null); setSidebarOpen(true); }}
       />
 
       <CallPlaceholderModal open={!!callMode} mode={callMode} onClose={() => setCallMode(null)} />
