@@ -116,6 +116,10 @@ export default function ChatApp() {
     socket.on('typing:stop', onTypingStop);
 
     function onNew(m) {
+      // If this message was sent by us, the socket callback in handleSend already
+      // replaced the optimistic bubble with the real message — skip to avoid duplicate.
+      if (m.senderId === user.id) return;
+
       setMessagesByConvo((prev) => {
         const list = prev[m.conversationId] || [];
         const deduped = list.filter((x) => {
