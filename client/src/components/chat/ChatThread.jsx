@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { format } from 'date-fns';
-import { Menu, Phone, Users, Video } from 'lucide-react';
+import { ArrowLeft, MessageSquare, Phone, Users, Video } from 'lucide-react';
 import { assetUrl } from '../../lib/api';
 import Avatar from '../ui/Avatar';
 import ChatComposer from './ChatComposer';
@@ -39,10 +39,33 @@ export default function ChatThread({
 
   if (!conversation) {
     return (
-      <section className="flex flex-1 flex-col items-center justify-center bg-surface-root p-8 text-center">
-        <p className="max-w-sm text-sm text-ink-soft">
-          Select a conversation or start a new one. Your recent threads appear in the sidebar.
-        </p>
+      <section className="flex flex-1 flex-col bg-surface-root">
+        <header className="flex shrink-0 items-center gap-3 border-b border-border bg-surface-panel px-3 py-2.5 md:hidden">
+          <button
+            type="button"
+            onClick={onOpenMenu}
+            className="rounded-lg p-2 text-ink-soft transition hover:bg-surface-card hover:text-ink"
+            aria-label="Open conversations"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+          <span className="text-sm font-semibold text-ink">Relay</span>
+        </header>
+        <div className="flex flex-1 flex-col items-center justify-center p-8 text-center">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-card shadow-chip">
+            <MessageSquare className="h-8 w-8 text-accent opacity-60" />
+          </div>
+          <p className="max-w-sm text-sm text-ink-soft">
+            Select a conversation or start a new one.
+          </p>
+          <button
+            type="button"
+            onClick={onOpenMenu}
+            className="mt-4 rounded-xl border border-border bg-surface-card px-4 py-2 text-sm font-medium text-ink shadow-chip transition hover:border-accent/30 md:hidden"
+          >
+            Open conversations
+          </button>
+        </div>
       </section>
     );
   }
@@ -62,8 +85,8 @@ export default function ChatThread({
       <header className="flex shrink-0 items-center gap-3 border-b border-border bg-surface-panel px-3 py-2.5 md:px-4">
         <button type="button" onClick={onOpenMenu}
           className="rounded-lg p-2 text-ink-soft transition hover:bg-surface-card hover:text-ink md:hidden"
-          aria-label="Open conversations">
-          <Menu className="h-5 w-5" />
+          aria-label="Back to conversations">
+          <ArrowLeft className="h-5 w-5" />
         </button>
         <Avatar size="sm" src={peer?.avatar ? assetUrl(peer.avatar) : ''}
           username={peer?.username || conversation.title} online={Boolean(peerOnline)} />
