@@ -31,7 +31,6 @@ html.light {
 
 html {
   font-family: var(--font-sans);
-  /* Prevent text size adjustment on orientation change (iOS) */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -40,9 +39,7 @@ body {
   margin: 0;
   background: var(--color-surface-root);
   color: var(--color-ink);
-  /* Smooth momentum scrolling on iOS */
   -webkit-overflow-scrolling: touch;
-  /* Prevent pull-to-refresh interfering with the app */
   overscroll-behavior-y: none;
 }
 
@@ -50,44 +47,44 @@ body {
   min-height: 100dvh;
 }
 
-/* Prevent 300ms tap delay on mobile */
+/* ── Remove 300ms tap delay everywhere ── */
 * {
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Scrollable areas get momentum scrolling */
+/* ── Momentum scroll for lists ── */
 .overflow-y-auto {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Prevent iOS from zooming in on focused inputs (font-size must be >= 16px equivalent) */
+/* ── Prevent iOS zoom on input focus (needs font-size ≥ 16px) ── */
 input,
 textarea,
 select {
-  font-size: max(16px, 1em);
-}
-
-/* But keep our designed text sizes visually – scale the input down after it's set */
-input.text-sm,
-textarea.text-sm {
   font-size: 16px;
 }
 
-/* Safe area insets for iPhone notch / home bar */
-.safe-bottom {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+/* ── Safe-area padding utilities ── */
+.pt-safe-top {
+  padding-top: max(env(safe-area-inset-top, 0px), 0px);
+}
+.pb-safe-bottom {
+  padding-bottom: max(env(safe-area-inset-bottom, 12px), 12px);
 }
 
-/* Emoji picker fits theme */
+/* ── Emoji picker theming ── */
 aside.EmojiPickerReact {
-  border-radius: 12px !important;
+  border-radius: 16px !important;
   border: 1px solid var(--color-border) !important;
   box-shadow: var(--shadow-soft) !important;
 }
 
-/* Better tap highlight */
-button,
-a,
-label[for] {
-  -webkit-tap-highlight-color: transparent;
+/* ── Typing indicator bounce ── */
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-4px); }
+}
+.animate-bounce {
+  animation: typingBounce 1.2s ease-in-out infinite;
 }
