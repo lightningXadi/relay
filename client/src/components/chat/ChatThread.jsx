@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { format } from 'date-fns';
-import { ArrowLeft, MessageSquare, Phone, Users, Video } from 'lucide-react';
+import { ArrowLeft, Menu, MessageSquare, Phone, Users, Video } from 'lucide-react';
 import { assetUrl } from '../../lib/api';
 import Avatar from '../ui/Avatar';
 import ChatComposer from './ChatComposer';
@@ -56,7 +56,7 @@ export default function ChatThread({
             <MessageSquare className="h-8 w-8 text-accent opacity-60" />
           </div>
           <p className="max-w-sm text-sm text-ink-soft">
-            Select a conversation or start a new one.
+            Select a conversation or start a new one. Your recent threads appear in the sidebar.
           </p>
           <button
             type="button"
@@ -95,7 +95,7 @@ export default function ChatThread({
           <p className="truncate text-xs text-ink-soft">
             {conversation.type === 'group'
               ? `${conversation.participants.length} people`
-              : peer ? 'Direct message' : ''}
+              : peer ? (peerOnline ? '🟢 Online' : 'Offline') : ''}
           </p>
         </div>
         <div className="flex items-center gap-1">
